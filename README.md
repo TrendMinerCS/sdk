@@ -1,15 +1,29 @@
-# Welcome to the TrendMiner MLHub Repository!
+# TrendMiner Experimental SDK
 
-## Overview
-TrendMiner is a self-service data analytics tool that serves the process industry by providing a platform for engineers, operators and others to perform analytics of the time-series data collected by sensors and stored in data historians.
+The **TrendMiner Experimental SDK** is a Python client library for interacting with TrendMiner’s REST API. It provides object models, authentication helpers, and high-level data retrieval methods for time-series analytics.
 
-The MLHub functionality enables the power of python for performing advanced analytics on your time-series data complementing the built-in functionalities available in TrendMiner. Create your own visualizations and deploy the output of the notebook to DashHub or build your own models using common machine learning techniques.
+## Installation
 
-## This repository
-Use the code snippets found in this repository as inspiration for your own projects. You will find some examples
-of how Pandas, Numpy, ScikitLearn, Matplolib, Plotly and other packages can be used together with the time series data that
-is already available in TrendMiner to enhance your analysis.
+This SDK is in active development and not published on PyPI. Install the latest distribution directly from GitHub:
 
-Review the [wiki page](https://github.com/TrendMiner/notebooks/wiki) for more information on how to get started.
+```bash
+pip install https://github.com/TrendMiner/notebooks/raw/main/sdk/trendminer_interface-0.1.dev900.tar.gz
+```
 
-For further reading, please refer to our [support documents](https://support.trendminer.com/hc/en-us/sections/360010399231-Embedded-Notebooks)
+## Quick Start
+
+```python
+from trendminer_interface import TrendMinerClient
+
+# Initialize client with API credentials
+tm = TrendMinerClient(
+    url="https://your-trendminer-instance.com",
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET",
+    tz="Europe/Brussels"
+)
+
+# Example: search for tags by name
+tags = tm.tag.by_name("TM-BP2*.1")
+print(tags)
+```
