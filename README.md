@@ -24,6 +24,6 @@ tm = TrendMinerClient(
 )
 
 # Example: search for tags by name
-tags = tm.tag.by_name("TM-BP2*.1")
+tags = tm.tag.search(name="TM-BP2*.1")
 print(tags)
 ```
