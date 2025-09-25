@@ -4,10 +4,23 @@ The **TrendMiner Experimental SDK** is a Python client library for interacting w
 
 ## Installation
 
-This SDK is in active development and not published on PyPI. Install the latest distribution directly from GitHub:
+This SDK is in active development and not published on PyPI. Install the latest distribution directly from GitHub based on your current TrendMiner version:
 
+### 2025R2
 ```bash
-pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/trendminer_interface-0.1.0.post172-py3-none-any.whl
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2/trendminer_interface-0.0.0-py3-none-any.whl
+```
+### 2025R1
+```bash
+https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R1/trendminer_interface-0.1.0.post161+86ad9f74.dirty-py3-none-any.whl
+```
+### 2024R3.1
+```bash
+https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R3.1/trendminer_interface-0.1.0.post160+1848287a.dirty-py3-none-any.whl
+```
+### 2024R2.1
+```bash
+https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2.1/trendminer_interface-0.1.0.post162+bc00a459.dirty-py3-none-any.whl
 ```
 
 ## Quick Start
