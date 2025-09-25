@@ -12,15 +12,15 @@ pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2/trendminer_i
 ```
 ### 2025R1
 ```bash
-https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R1/trendminer_interface-0.1.0.post161+86ad9f74.dirty-py3-none-any.whl
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R1/trendminer_interface-0.1.0.post161+86ad9f74.dirty-py3-none-any.whl
 ```
 ### 2024R3.1
 ```bash
-https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R3.1/trendminer_interface-0.1.0.post160+1848287a.dirty-py3-none-any.whl
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R3.1/trendminer_interface-0.1.0.post160+1848287a.dirty-py3-none-any.whl
 ```
 ### 2024R2.1
 ```bash
-https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2.1/trendminer_interface-0.1.0.post162+bc00a459.dirty-py3-none-any.whl
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2.1/trendminer_interface-0.1.0.post162+bc00a459.dirty-py3-none-any.whl
 ```
 
 ## Quick Start
