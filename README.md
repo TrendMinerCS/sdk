@@ -22,6 +22,10 @@ pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2024R3.1/trendminer
 ```bash
 pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2024R2.1/trendminer_interface-0.1.0.post162+bc00a459.dirty-py3-none-any.whl
 ```
+### 2024R3
+```bash
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R3/trendminer_interface-0.1.0.post204-py3-none-any.whl
+```
 
 ## Quick Start
 
