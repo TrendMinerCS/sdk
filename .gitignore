@@ -217,4 +217,7 @@ $RECYCLE.BIN/
 # SDK builder
 _build_sdk.py
 
+# Ignore .idea folder
+.idea
+
 # End of https://www.toptal.com/developers/gitignore/api/python,macos,windows,linux
