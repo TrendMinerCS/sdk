@@ -8,12 +8,12 @@ This SDK is in active development and not published on PyPI. Install the latest 
 
 ### 2025R3
 ```bash
-pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R3/trendminer_interface-0.1.0.post213-py3-none-any.whl
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R3/trendminer_interface-0.1.0.post222-py3-none-any.whl
 ```
 
 ### 2025R2
 ```bash
-pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2/trendminer_interface-0.0.0-py3-none-any.whl
+pip install https://github.com/TrendMinerCS/sdk/raw/main/sdk/2025R2/trendminer_interface-0.1.0.post194-py3-none-any.whl
 ```
 
 ### 2025R1
