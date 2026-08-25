@@ -23,7 +23,8 @@ print(client.appliance.get_version())
 Every release ships a single plain-text bundle built for chatbot ingestion — the
 full API surface, worked examples, and explicit constraints in one file.
 
-**For preview:**
+**For preview:** [**llms-full.txt**](preview/llms-full.txt) — right-click to save, or
+copy the URL:
 
 ```
 https://trendminercs.github.io/sdk/preview/llms-full.txt
@@ -31,7 +32,8 @@ https://trendminercs.github.io/sdk/preview/llms-full.txt
 
 Point your assistant at that URL, or download it and attach it to the
 conversation. Attaching is more reliable — many enterprise assistants have URL
-fetching disabled.
+fetching disabled, and some will only fetch a URL that arrived as a real link
+rather than as text.
 
 Then ask for what you want, for example:
 
@@ -39,7 +41,7 @@ Then ask for what you want, for example:
 > authenticates against our appliance and lists all tags matching "TI-*".
 
 A short index for tools that look for it lives at
-[`llms.txt`](https://trendminercs.github.io/sdk/preview/llms.txt).
+[`llms.txt`](preview/llms.txt).
 
 !!! warning "Match the bundle to your appliance"
     The bundle states the release it documents in its header. Giving an assistant
