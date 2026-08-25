@@ -1,0 +1,49 @@
+# Goes in the ROOT of TrendMinerCS/sdk.
+#
+# One build covering every documented TrendMiner release. Docs live under
+# docs/<release>/, so a page lands at /sdk/<release>/<page>/ and the machine
+# bundle at /sdk/<release>/llms-full.txt (MkDocs copies non-markdown files
+# through verbatim).
+#
+# Add a release: generate it into docs/<release>/ and add a nav block below.
+site_name: TrendMiner Python SDK
+site_description: Python client library for the TrendMiner REST API
+site_url: https://trendminercs.github.io/sdk/
+repo_url: https://github.com/TrendMinerCS/sdk
+docs_dir: docs
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - content.code.copy
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - preview:
+      - Authentication: preview/authentication.md

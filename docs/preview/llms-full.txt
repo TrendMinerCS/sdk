@@ -1,0 +1,243 @@
+# TrendMiner Python SDK — Authentication
+
+SDK package: `trendminer_interface` version `1.3.1`
+Applies to TrendMiner release: **preview**
+
+This document describes ONLY the version above. Do not assume APIs from other versions exist. If a symbol is not documented here, it is not available — do not invent it.
+
+---
+
+Every interaction with TrendMiner starts by constructing a `TrendMinerClient`. The
+SDK gives you four ways to do that, and which one you want depends entirely on
+*where your code runs*.
+
+## Choosing a flow
+
+| Where your code runs | Use | Why |
+| --- | --- | --- |
+| MLHub notebook or custom calculation | `client_from_env` | The token is already in the environment; no URL or secret needed. |
+| Script or automation, local account | `client_from_credentials` | Standard client or user authentication. |
+| Script or automation, SSO account | `client_from_refresh_token` | SSO users cannot use the password grant. |
+| Inside an application that already manages tokens | `client_with_bearer_auth` | You supply a callable; the SDK calls it per request. |
+
+## Quick start
+
+Running outside TrendMiner, authenticating as a specific user:
+
+```python
+import os
+from trendminer_interface import client_from_credentials
+
+client = client_from_credentials(
+    url="https://trendminer.example.com",
+    client_id=os.environ["TM_CLIENT_ID"],
+    client_secret=os.environ["TM_CLIENT_SECRET"],
+    username=os.environ["TM_USERNAME"],
+    password=os.environ["TM_PASSWORD"],
+    tz="Europe/Brussels",
+)
+
+print(client.appliance.get_version())
+```
+
+Running inside an MLHub notebook or a custom calculation, the same thing is one call:
+
+```python
+from trendminer_interface import client_from_env
+
+client = client_from_env(tz="Europe/Brussels")
+```
+
+## Client versus user authentication
+
+`client_from_credentials` behaves differently depending on what you pass:
+
+- **`client_id` + `client_secret` only** — authenticates as the *client*. The
+  session has the permissions attached to that client.
+- **plus `username` + `password`** — authenticates as the *user*. Permissions are
+  the user's, and any permissions attached to the client are ignored.
+
+This distinction matters because **admin operations require a real user**. If an
+admin call returns a permission error, check that you passed credentials for a
+user and not just the client.
+
+Saved items — views, searches, monitors — also belong to whoever authenticated,
+so a client-authenticated session will not see a user's saved work.
+
+## Timezones
+
+`tz` accepts an IANA string (`"Europe/Brussels"`) or a `ZoneInfo`, and defaults to
+UTC. It applies in both directions: every timestamp the SDK returns is in this
+timezone, and any naive timestamp you pass in is interpreted as being in it. Set
+it once at construction rather than converting afterwards.
+
+## Version compatibility
+
+The SDK is built against specific TrendMiner releases. On construction it checks
+the appliance version and raises a `VersionMismatchWarning` if the appliance is
+not one it was tested against. The warning is not fatal, and most things will
+still work — but treat it as a signal that you are on a version pairing nobody
+has validated. Pass `check_version=False` to suppress it if you have accepted
+that risk.
+
+`client_from_env` deliberately skips this check: inside MLHub or a custom
+calculation, the SDK and the appliance ship together.
+
+## Getting a refresh token
+
+For SSO accounts, obtain the refresh token by logging in to your TrendMiner
+appliance in a browser, opening developer tools, and copying it from the
+authentication request. Treat it as a secret with the same care as a password.
+
+## client_from_credentials
+
+Import: `from trendminer_interface import client_from_credentials`
+
+Create a TrendMinerClient from credentials
+
+Signature:
+
+```python
+client_from_credentials(
+    url: str,
+    client_id: str,
+    client_secret: str,
+    username: str | None = None,
+    password: str | None = None,
+    tz: ZoneInfo | str = ZoneInfo('UTC'),
+    verify: bool = True,
+    timeout: float | tuple[float, float] = (10, 120),
+    transport: httpx.BaseTransport | None = None,
+    check_version: bool = True,
+) -> TrendMinerClient
+```
+
+Providing client id and client secret leads to client authentication. The resulting client will have the permissions
+of that client user. To authenticate as a specific user, username and password need to be provided. The resulting
+permissions will be of that user, ignoring any permissions linked to the client id.
+
+Some functions may require admin permissions. Only actual users can have these permissions.
+
+Parameters:
+
+- `url` (str, required) — TrendMiner appliance url
+- `client_id` (str, required) — Valid client id for the given appliance.
+- `client_secret` (str, required) — Client secret matching the given client id.
+- `username` (str, optional) — Setting username provides access to the resources of this user (e.g., saved items).
+- `password` (str, optional) — Password matching the given username.
+- `tz` (str or ZoneInfo, default `UTC`) — Client timezone. All time outputs given in client timezone. All inputs without explicit timezone are considered to be in the client timezone.
+- `verify` (bool, default `True`) — Sets verify parameter for the requests to appliance. Setting to False prevents SSLError in case appliance SSL certificates are not valid.
+- `timeout` (float or tuple, default `(10, 120)`) — Timeout settings for requests.
+- `transport` (httpx.BaseTransport, optional) — Custom httpx transport for the underlying httpx.Client.
+- `check_version` (bool, default `True`) — Whether to check if the TrendMiner appliance version is supported by this SDK version. If True, a warning is raised if the appliance version does not match the supported versions.
+
+Returns: `TrendMinerClient`
+
+## client_from_env
+
+Import: `from trendminer_interface import client_from_env`
+
+Create a TrendMinerClient from environmental variables
+
+Signature:
+
+```python
+client_from_env(
+    tz: ZoneInfo | str = ZoneInfo('UTC'),
+    verify: bool = True,
+    timeout: float | tuple[float, float] = (10, 120),
+    transport: httpx.BaseTransport | None = None,
+) -> TrendMinerClient
+```
+
+Supports getting an access token from KERNEL_USER_TOKEN (MLHub notebook) or ACCESS_TOKEN (Custom calculations).
+
+Parameters:
+
+- `tz` (str or ZoneInfo, default `UTC`) — Client timezone. All time outputs given in client timezone. All inputs without explicit timezone are considered to be in the client timezone.
+- `verify` (bool, default `True`) — Sets verify parameter for the requests to appliance. Setting to False prevents SSLError in case appliance SSL certificates are not valid.
+- `timeout` (float or tuple, default `(10, 120)`) — Timeout settings for requests.
+- `transport` (httpx.BaseTransport, optional) — Custom httpx transport for the underlying httpx.Client.
+
+Returns: `TrendMinerClient`
+
+## client_from_refresh_token
+
+Import: `from trendminer_interface import client_from_refresh_token`
+
+Create a TrendMinerClient from a refresh token
+
+Signature:
+
+```python
+client_from_refresh_token(
+    refresh_token: str,
+    client_id: str,
+    client_secret: str,
+    tz: ZoneInfo | str = ZoneInfo('UTC'),
+    verify: bool = True,
+    timeout: float | tuple[float, float] = (10, 120),
+    transport: httpx.BaseTransport | None = None,
+    check_version: bool = True,
+) -> TrendMinerClient
+```
+
+Intended use case is to run automations for SSO-based users, who cannot use the password grant type. The refresh
+token can be obtained by logging in to the TrendMiner appliance via the browser, opening the developer tools, and
+copying the refresh token.
+
+A client ID and client secret are still required, but the resulting client will have the permissions of the user
+linked to the refresh token.
+
+Parameters:
+
+- `refresh_token` (str, required) — Refresh token obtained from the TrendMiner appliance.
+- `client_id` (str, required) — Valid client id for the given appliance.
+- `client_secret` (str, required) — Client secret matching the given client id.
+- `tz` (str or ZoneInfo, default `UTC`) — Client timezone. All time outputs given in client timezone. All inputs without explicit timezone are considered to be in the client timezone.
+- `verify` (bool, default `True`) — Sets verify parameter for the requests to appliance. Setting to False prevents SSLError in case appliance SSL certificates are not valid.
+- `timeout` (float or tuple, default `(10, 120)`) — Timeout settings for requests.
+- `transport` (httpx.BaseTransport, optional) — Custom httpx transport for the underlying httpx.Client.
+- `check_version` (bool, default `True`) — Whether to check if the TrendMiner appliance version is supported by this SDK version. If True, a warning is raised if the appliance version does not match the supported versions.
+
+Returns: `TrendMinerClient`
+
+## client_with_bearer_auth
+
+Import: `from trendminer_interface import client_with_bearer_auth`
+
+Create a TrendMinerClient authenticated with a bearer token.
+
+Signature:
+
+```python
+client_with_bearer_auth(
+    access_token_provider: Callable[[], str],
+    server_url: str,
+    tz: ZoneInfo | str = ZoneInfo('UTC'),
+    verify: bool = True,
+    timeout: float | tuple[float, float] = (10, 120),
+    transport: httpx.BaseTransport | None = None,
+) -> TrendMinerClient
+```
+
+Parameters:
+
+- `access_token_provider` (Callable[[], str], required) — Callable that returns a valid access token string. Called on each request.
+- `server_url` (str, required) — Base URL of the TrendMiner appliance.
+- `tz` (str or ZoneInfo, default `UTC`) — Client timezone. All time outputs given in client timezone. All inputs without explicit timezone are considered to be in the client timezone.
+- `verify` (bool, default `True`) — Sets verify parameter for the requests to appliance. Setting to False prevents SSLError in case appliance SSL certificates are not valid.
+- `timeout` (float or tuple, default `(10, 120)`) — Timeout settings for requests.
+- `transport` (httpx.BaseTransport, optional) — Custom httpx transport for the underlying httpx.Client.
+
+Returns: `TrendMinerClient`
+
+## Constraints and common mistakes
+
+- There are exactly four ways to construct a client: `client_from_credentials`, `client_from_env`, `client_from_refresh_token`, and `client_with_bearer_auth`. No other constructor exists.
+- Do not call `TrendMinerClient(...)` directly. It takes a pre-configured `httpx.Client` and a timezone, not a URL or credentials.
+- `client_from_env` takes no URL — it derives the appliance URL from the token issuer claim. It only works inside MLHub notebooks (`KERNEL_USER_TOKEN`) or custom calculations (`ACCESS_TOKEN`).
+- Passing `username` and `password` to `client_from_credentials` switches from client authentication to user authentication; `client_id` and `client_secret` are still required in both cases.
+- Admin-only operations require user authentication. A client authenticated with only `client_id`/`client_secret` cannot perform them.
+- `tz` accepts a `ZoneInfo` or an IANA string such as `"Europe/Brussels"`. All returned timestamps are in this timezone, and naive input timestamps are interpreted in it.
+- Set `verify=False` only for appliances with self-signed certificates. Never hard-code credentials in generated code — read them from environment variables.
